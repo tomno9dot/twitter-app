@@ -1,22 +1,58 @@
 import mongoose from "mongoose"
 
-const UserSchema = new mongoose({
+const userSchema = new mongoose.Schema({
     username: {
        type: String,
+       required: true,
        Unique: true 
     },
     fullname: {
         type: String,
+        required: true
     },
     
     email: {
-        type: string,
-        Unique: true
+        type: String,
+        Unique: true,
+        required: true
     },
     password: {
-        type: string,
-        minlength: {6},
-    }
-} timestamps: true)
+        type: String,
+        minlength: 6,
+    },
+    followers: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "User",
+            default: []
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "User",
+            default: []
+        }
+    ],
+    profileImg: {
+        type: String,
+        default: "",
 
-const User = mongoose.model("User", UserSchema)
+    },
+    bio:{
+        type: String,
+        default: "",
+    },
+    link: {
+        type: String,
+        default: "",
+    }
+
+
+
+    
+}, {timestamps: true})
+
+const User = mongoose.model("User", userSchema)
+
+export default User
