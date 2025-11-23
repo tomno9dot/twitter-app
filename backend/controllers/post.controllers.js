@@ -8,7 +8,7 @@ export const createPost = async (req, res) => {
         let {img} = req.body
         const userId = req.user._id.toString();
 
-        const user = await findById(userId);
+        const user = await Post.findById(userId);
         if(!user) return res.status(404).json({message: "User not found"})
 
          if (!text && !img) {
@@ -31,7 +31,7 @@ export const createPost = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({error: "Internal server error"})
-        console.lo('Error in createpost controller:', error );
+        console.log('Error in createpost controller:', error );
 
     }
 
@@ -140,27 +140,28 @@ export const likeUnlikePost = async (req, res) => {
 
 } 
 export const getAllPosts = async (req, res) => {
-    try {
-        const posts = await Post.find().sort({createdAt: -1}).populate({
-            path: "user",
-            select: "-password"
-        })
-        .populate({
-            path: "comments.user",
-            select: "-password"
-        })
+	try {
+		const posts = await Post.find()
+			.sort({ createdAt: -1 })
+			.populate({
+				path: "user",
+				select: "-password",
+			})
+			.populate({
+				path: "comments.user",
+				select: "-password",
+			});
 
-        if(posts.length === 0) {
-            return res.status(200).json([])
-        }
-        res.status(200).json(posts);
+		if (posts.length === 0) {
+			return res.status(200).json([]);
+		}
 
-    } catch(error) {
-        console.log("Error in getAllPosts controller:", error)
-        res.status(500).json({error: "Internal server error"})
-
-    }
-}
+		res.status(200).json(posts);
+	} catch (error) {
+		console.log("Error in getAllPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
 export const getLikedPosts = async (req, res) => {
     const userId = req.params.id
     try {

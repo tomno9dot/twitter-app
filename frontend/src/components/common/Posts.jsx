@@ -7,7 +7,7 @@ import {useEffect} from 'react'
 const Posts = ({feedType}) => {
 
 
-	const getPostEndPoint = () => {
+	const getPostEndpoint = () => {
 		switch (feedType) {
 			case "forYou" :
 				return "/api/posts/all";
@@ -18,7 +18,7 @@ const Posts = ({feedType}) => {
 		}
 	}
 
-	const POST_ENDPOINT = getPostEndPoint()
+	const POST_ENDPOINT = getPostEndpoint();
 
 	const {data: posts, isLoading, refetch, isRefetching} = useQuery({
 		queryKey: ["posts"],
@@ -28,7 +28,7 @@ const Posts = ({feedType}) => {
 				const data = await res.json();
 
 				if(!res.ok) {
-					throw new Error(dat.error || "Something went wrong")
+					throw new Error(data.error || "Something went wrong")
 				}
 				return data
 
